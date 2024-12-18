@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: order-service
+server:
+  port: 8081
+stacksaga:
+  enable: true
+  component-scan: demo.quickdemo.aggregators
+  app-release-version: 1.0.0
+  datasource:
+    ddl-auto: update
+    jdbc-url: jdbc:mysql://localhost:3306/ll_stacksaga_event_store?createDatabaseIfNotExist=true
+    username: root
+    password: mafei
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  cloud-window:
+    access-token: 04949811-7be5-427f-8a80-57a26592493f
+    enable-api: true
+    enable-api-filtering: true
