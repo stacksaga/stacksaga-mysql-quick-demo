@@ -31,6 +31,6 @@ public class GetUserDetailsExecutor implements QueryExecutor<PlaceOrderAggregato
             //updates the aggregator with the user details
             currentAggregator.setUserId("mafei");
         }
-        return stepManager.next(MakePaymentExecutor.class, () -> "PLACED_ORDER");
+        return stepManager.next(PreAuthExecutor.class, () -> "USER_DETAILS_FETCHED");
     }
 }

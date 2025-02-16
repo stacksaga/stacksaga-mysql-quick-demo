@@ -2,7 +2,7 @@ package demo.quickdemo.controller;
 
 import demo.quickdemo.aggregators.PlaceOrderAggregator;
 import demo.quickdemo.dto.PlaceOrderDto;
-import demo.quickdemo.executors.PlaceOrderInitExecutor;
+import demo.quickdemo.executors.OrderInitializeExecutor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -21,7 +21,7 @@ public class PlaceOrderController {
     public PlaceOrderDto.Response placeOrder(@RequestBody PlaceOrderDto.Request request) {
         final PlaceOrderAggregator placeOrderAggregator = new PlaceOrderAggregator();
         placeOrderAggregator.setAmount(request.getAmount());
-        final String orderId = this.placeOrderAggregatorSagaTemplate.process(placeOrderAggregator, PlaceOrderInitExecutor.class);
+        final String orderId = this.placeOrderAggregatorSagaTemplate.process(placeOrderAggregator, OrderInitializeExecutor.class);
         return new PlaceOrderDto.Response(orderId);
     }
 }

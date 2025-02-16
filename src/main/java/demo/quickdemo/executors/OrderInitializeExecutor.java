@@ -15,9 +15,9 @@ import java.util.Random;
 
 @SagaExecutor(
         executeFor = "order-service",
-        value = "PlaceOrderInitExecutor"
+        value = "OrderInitializeExecutor"
 )
-public class PlaceOrderInitExecutor implements CommandExecutor<PlaceOrderAggregator> {
+public class OrderInitializeExecutor implements CommandExecutor<PlaceOrderAggregator> {
 
     @SneakyThrows
     @Override

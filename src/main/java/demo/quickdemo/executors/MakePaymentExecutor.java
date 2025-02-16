@@ -28,6 +28,7 @@ public class MakePaymentExecutor implements CommandExecutor<PlaceOrderAggregator
     ) throws RetryableExecutorException, NonRetryableExecutorException {
 
         // TODO: execute payment process here
+        // access the preAuthRefId from the aggregator to making the request
         Thread.sleep(new Random().nextLong(1000, 3000));
         {
             //updates the aggregator with the payment id
