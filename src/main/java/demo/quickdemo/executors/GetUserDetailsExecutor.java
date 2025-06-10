@@ -9,8 +9,6 @@ import org.stacksaga.exception.RetryableExecutorException;
 import org.stacksaga.exception.execution.NonRetryableExecutorException;
 import org.stacksaga.executor.QueryExecutor;
 
-import java.util.Random;
-
 @SagaExecutor(
         executeFor = "user-service",
         value = "GetUserDetailsExecutor"
@@ -26,11 +24,12 @@ public class GetUserDetailsExecutor implements QueryExecutor<PlaceOrderAggregato
     ) throws RetryableExecutorException, NonRetryableExecutorException {
 
         // TODO: Get user details from user-service
-        Thread.sleep(new Random().nextLong(1000, 3000));
+//        Thread.sleep(new Random().nextLong(1000, 3000));
         {
             //updates the aggregator with the user details
             currentAggregator.setUserId("mafei");
         }
         return stepManager.next(PreAuthExecutor.class, () -> "USER_DETAILS_FETCHED");
+//        throw new RuntimeException("fucking error");
     }
 }

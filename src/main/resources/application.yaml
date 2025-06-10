@@ -1,10 +1,32 @@
 spring:
   application:
     name: order-service
+  kafka:
+    consumer:
+      properties:
+        session.timeout.ms: 15000
+        max.poll.interval.ms: 300000
+        spring.json.trusted.packages: demo.quickdemo.aggregators
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    producer:
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+      properties:
+        spring.json.trusted.packages: "*"
+  r2dbc:
+    url: r2dbc:mysql://localhost:3306/ll_stacksaga_event_store
+    username: root
+    password: dilhara
+    name: ll_stacksaga_event_store
+  cassandra:
+    config: classpath:cassandra.conf
+    keyspace-name: stacksaga
 server:
-  port: 8081
+  port: 8082
 stacksaga:
-  enable: true
+  async:
+    component-scan: demo.quickdemo.executors
   component-scan: demo.quickdemo.aggregators
   app-release-version: 2.0.1
   mysql:
@@ -12,10 +34,25 @@ stacksaga:
       ddl-auto: update
       jdbc-url: jdbc:mysql://localhost:3306/ll_stacksaga_event_store?createDatabaseIfNotExist=true
       username: root
-      password: mafei
+      password: dilhara
       driver-class-name: com.mysql.cj.jdbc.Driver
+    use-default-r2dbc-connection: true
   cloud-window:
     access-token: 04949811-7be5-427f-8a80-57a26592493f
     enable-api: true
-    enable-api-filtering: true
-  environment: dev
+    enable-api-filtering: false
+  datasource:
+    cassandra:
+      use-default-session: true
+logging:
+  pattern:
+    level: "%5p [${spring.application.name:},%X{aggregatorId:-}, %X{testn:-}, ]"
+  #    console: "%d{yyyy-MM-dd HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+  level:
+    stacksaga: trace
+    org.stacksaga: trace
+    org.stacksaga.exception: trace
+    org.apache.kafka.clients: error
+    org.stacksaga.mysql.reactive.mapper: off
+    org.stacksaga.mysql.reactive.service: off
+    org.stacksaga.mysql.reactive.transaction: off

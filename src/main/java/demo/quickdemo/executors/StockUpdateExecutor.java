@@ -28,7 +28,9 @@ public class StockUpdateExecutor implements CommandExecutor<PlaceOrderAggregator
     ) throws RetryableExecutorException, NonRetryableExecutorException {
 
         // TODO: execute stock update process here
-        Thread.sleep(new Random().nextLong(1000, 3000));
+//        Thread.sleep(new Random().nextLong(1000, 3000));
+//        throw new RuntimeException("STOCK_UPDATED");
+//
         return stepManager.complete(() -> "STOCK_UPDATED");
     }
 
@@ -39,7 +41,8 @@ public class StockUpdateExecutor implements CommandExecutor<PlaceOrderAggregator
                                            String idempotencyKey
     ) throws RetryableExecutorException {
 
+        throw new RuntimeException("STOCK_UPDATED");
         // TODO: execute stock revert process here
-        return () -> "STOCK_REVERTED";
+//        return () -> "STOCK_REVERTED";
     }
 }
