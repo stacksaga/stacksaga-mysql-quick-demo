@@ -29,9 +29,9 @@ public class StockUpdateExecutor implements CommandExecutor<PlaceOrderAggregator
 
         // TODO: execute stock update process here
 //        Thread.sleep(new Random().nextLong(1000, 3000));
-//        throw new RuntimeException("STOCK_UPDATED");
+        throw new RuntimeException("STOCK_UPDATED");
 //
-        return stepManager.complete(() -> "STOCK_UPDATED");
+//        return stepManager.complete(() -> "STOCK_UPDATED");
     }
 
     @Override
