@@ -1,8 +1,6 @@
-/*
-package demo.quickdemo.executors;
+package demo.quickdemo.event;
 
 import demo.quickdemo.aggregators.AsyncPlaceOrderAggregator;
-import demo.quickdemo.event.PlaceOrderEvent;
 import org.stacksaga.RevertHintStore;
 import org.stacksaga.exception.execution.NonRetryableExecutorException;
 import stacksaga.async.core.SagaEventManager;
@@ -22,28 +20,28 @@ public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAg
             case DO_UPDATE_STOCK -> {
                 aggregator.setIsReadyToDelivery("yes i am ready");
                 yield SagaPrimaryEventAction.next(PlaceOrderEvent.DO_MAKE_DELIVERY);
-*/
-/*                yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
+                /*yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
                         NonRetryableExecutorException
                                 .buildWith(new RuntimeException("something went wrong."))
                                 .put("message", "something went wrong")
                                 .put("message1", "something went wrong")
                                 .build()
-                );*//*
+                );*/
+
 
             }
             case DO_MAKE_DELIVERY -> {
                 aggregator.setIsReadyToDelivery("yes i am ready");
                 //todo: 30/05/2025 20:25 test with undo action
                 yield SagaPrimaryEventAction.next(PlaceOrderEvent.DO_DO_SOME1);
-*/
-/*                yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
+/*yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
                         NonRetryableExecutorException
                                 .buildWith(new RuntimeException("something went wrong."))
                                 .put("message", "something went wrong")
                                 .put("message1", "something went wrong")
                                 .build()
-                );*//*
+                );*/
+
 
             }
 
@@ -61,6 +59,9 @@ public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAg
             case UNDO_UPDATE_STOCK -> {
                 yield SagaRevertEventAction.next(PlaceOrderEvent.UNDO_MAKE_PAYMENT_SUB_BEFORE_1);
             }
+            case UNDO_MAKE_PAYMENT_SUB_BEFORE_1 -> {
+                yield SagaRevertEventAction.next(PlaceOrderEvent.UNDO_MAKE_PAYMENT_SUB_BEFORE_2);
+            }
             case UNDO_MAKE_PAYMENT -> {
                 yield SagaRevertEventAction.next(PlaceOrderEvent.UNDO_MAKE_PAYMENT_SUB_AFTER_1);
             }
@@ -68,4 +69,3 @@ public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAg
         };
     }
 }
-*/
