@@ -1,10 +1,2 @@
 spring.application.name=order-service
 server.port=8081
-stacksaga.enable=true
-stacksaga.component-scan=demo.quickdemo.aggregators
-stacksaga.app-release-version=1.0.0
-stacksaga.datasource.ddl-auto=update
-stacksaga.datasource.jdbc-url=jdbc:mysql://localhost:3306/ll_stacksaga_event_store?createDatabaseIfNotExist=true
-stacksaga.datasource.username=root
-stacksaga.datasource.password=mafei
-stacksaga.datasource.driver-class-name=com.mysql.cj.jdbc.Driver

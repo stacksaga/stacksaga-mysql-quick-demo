@@ -3,13 +3,14 @@ package demo.quickdemo.event;
 import demo.quickdemo.aggregators.AsyncPlaceOrderAggregator;
 import org.stacksaga.RevertHintStore;
 import org.stacksaga.exception.execution.NonRetryableExecutorException;
-import stacksaga.async.core.SagaEventManager;
+import stacksaga.async.core.SagaEventNavigator;
 import stacksaga.async.core.SagaStepExecutor;
 import stacksaga.async.core.service.SagaPrimaryEventAction;
 import stacksaga.async.core.service.SagaRevertEventAction;
 
-@SagaStepExecutor(rootTopic = "PlaceOrderStepManager", value = "PlaceOrderStepManager", partitions = {0})
-public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAggregator, PlaceOrderEvent> {
+@SagaStepExecutor(rootTopicSuffix = "PlaceOrderStepManager", value = "PlaceOrderStepManager")
+public class PlaceOrderStepManager implements SagaEventNavigator<AsyncPlaceOrderAggregator, PlaceOrderEvent> {
+
     @Override
     public SagaPrimaryEventAction<PlaceOrderEvent> onNext(PlaceOrderEvent lastEvent, AsyncPlaceOrderAggregator aggregator) {
         return switch (lastEvent) {
@@ -34,14 +35,28 @@ public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAg
                 aggregator.setIsReadyToDelivery("yes i am ready");
                 //todo: 30/05/2025 20:25 test with undo action
                 yield SagaPrimaryEventAction.next(PlaceOrderEvent.DO_DO_SOME1);
-/*yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
+                /*yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
                         NonRetryableExecutorException
                                 .buildWith(new RuntimeException("something went wrong."))
                                 .put("message", "something went wrong")
                                 .put("message1", "something went wrong")
                                 .build()
-                );*/
+                );
+*/
 
+            }
+            case DO_DO_SOME1 -> {
+                aggregator.setIsReadyToDelivery("yes i am ready2");
+                //todo: 30/05/2025 20:25 test with undo action
+                yield SagaPrimaryEventAction.next(PlaceOrderEvent.DO_DO_SOME2);
+                /*yield SagaPrimaryEventAction.error(PlaceOrderEvent.DO_MAKE_DELIVERY,
+                        NonRetryableExecutorException
+                                .buildWith(new RuntimeException("something went wrong."))
+                                .put("message", "something went wrong")
+                                .put("message1", "something went wrong")
+                                .build()
+                );
+*/
 
             }
 
@@ -50,10 +65,10 @@ public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAg
     }
 
     @Override
-    public SagaRevertEventAction<PlaceOrderEvent> onNextRever(PlaceOrderEvent lastEvent,
-                                                              AsyncPlaceOrderAggregator aggregator,
-                                                              NonRetryableExecutorException exception,
-                                                              RevertHintStore revertHintStore) {
+    public SagaRevertEventAction<PlaceOrderEvent> onNextRevert(PlaceOrderEvent lastEvent,
+                                                               AsyncPlaceOrderAggregator aggregator,
+                                                               NonRetryableExecutorException exception,
+                                                               RevertHintStore revertHintStore) {
         System.out.println("lastEvent = " + lastEvent);
         return switch (lastEvent) {
             case UNDO_UPDATE_STOCK -> {
@@ -68,4 +83,6 @@ public class PlaceOrderStepManager implements SagaEventManager<AsyncPlaceOrderAg
             default -> SagaRevertEventAction.autopilot();
         };
     }
+
+
 }

@@ -1,9 +1,10 @@
-package demo.quickdemo.event;
+package demo.quickdemo;
 
 import stacksaga.async.core.SagaTopic;
 import stacksaga.async.core.SagaTopicType;
 
-public enum PlaceOrderEvent implements SagaTopic<PlaceOrderEvent> {
+public enum PlaceOrderTopic implements SagaTopic<PlaceOrderTopic> {
+    DO_USER_VALIDATE(1, "user-service", SagaTopicType.QUERY_DO_ACTION),
     DO_MAKE_PAYMENT(1, "order-service", SagaTopicType.COMMAND_DO_ACTION),
     UNDO_MAKE_PAYMENT(2, "order-service", SagaTopicType.COMMAND_UNDO_ACTION, DO_MAKE_PAYMENT),
     UNDO_MAKE_PAYMENT_SUB_BEFORE_1(-2.1f, "order-service", SagaTopicType.COMMAND_UNDO_BEFORE_ACTION, UNDO_MAKE_PAYMENT),
@@ -13,31 +14,25 @@ public enum PlaceOrderEvent implements SagaTopic<PlaceOrderEvent> {
     UNDO_UPDATE_STOCK(4, "order-service", SagaTopicType.COMMAND_UNDO_ACTION, DO_UPDATE_STOCK),
     DO_MAKE_DELIVERY(5, "delivery-service", SagaTopicType.COMMAND_DO_ACTION),
     UNDO_MAKE_DELIVERY(6, "delivery-service", SagaTopicType.COMMAND_UNDO_ACTION, DO_MAKE_DELIVERY),
-    UNDO_MAKE_DELIVERY_SUB_1(7, "delivery-service", SagaTopicType.COMMAND_UNDO_AFTER_ACTION, UNDO_MAKE_DELIVERY),
-    UNDO_MAKE_DELIVERY_SUB_2(8, "delivery-service", SagaTopicType.COMMAND_UNDO_AFTER_ACTION, UNDO_MAKE_DELIVERY),
-    DO_DO_SOME1(9, "order-service", SagaTopicType.COMMAND_DO_ACTION),
-    DO_DO_SOME2(9.1f, "order-service", SagaTopicType.COMMAND_DO_ACTION),
-    UNDO_DO_SOME1(10, "order-service", SagaTopicType.COMMAND_UNDO_ACTION, DO_DO_SOME1),
-    DO_USER_VALIDATE(11, "order-service", SagaTopicType.QUERY_DO_ACTION),
     ;
 
     private final String targetServiceName;
     private final SagaTopicType sagaEventType;
-    private final PlaceOrderEvent revert;
-    private final float eventKey;
+    private final PlaceOrderTopic revert;
+    private final float topicKey;
 
-    PlaceOrderEvent(float eventKey, String targetServiceName, SagaTopicType sagaEventType, PlaceOrderEvent parent) {
+    PlaceOrderTopic(float topicKey, String targetServiceName, SagaTopicType sagaEventType, PlaceOrderTopic parent) {
         this.targetServiceName = targetServiceName;
         this.sagaEventType = sagaEventType;
         this.revert = parent;
-        this.eventKey = eventKey;
+        this.topicKey = topicKey;
     }
 
-    PlaceOrderEvent(float eventKey, String targetServiceName, SagaTopicType sagaEventType) {
+    PlaceOrderTopic(float topicKey, String targetServiceName, SagaTopicType sagaEventType) {
         this.targetServiceName = targetServiceName;
         this.sagaEventType = sagaEventType;
         this.revert = null;
-        this.eventKey = eventKey;
+        this.topicKey = topicKey;
     }
 
     @Override
@@ -51,12 +46,12 @@ public enum PlaceOrderEvent implements SagaTopic<PlaceOrderEvent> {
     }
 
     @Override
-    public PlaceOrderEvent parent() {
+    public PlaceOrderTopic parent() {
         return this.revert;
     }
 
     @Override
     public float topicKey() {
-        return this.eventKey;
+        return this.topicKey;
     }
 }

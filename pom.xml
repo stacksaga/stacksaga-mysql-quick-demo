@@ -26,18 +26,30 @@
         <tag/>
         <url/>
     </scm>
+
     <properties>
         <java.version>17</java.version>
+        <spring-cloud.version>2024.0.1</spring-cloud.version>
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.springframework.cloud</groupId>
+                <artifactId>spring-cloud-dependencies</artifactId>
+                <version>${spring-cloud.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-        <dependency>
-            <groupId>io.micrometer</groupId>
-            <artifactId>context-propagation</artifactId>
-        </dependency>
+
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
@@ -58,16 +70,28 @@
             <artifactId>stacksaga-spring-boot-starter</artifactId>
             <version>1.0.0</version>
         </dependency>
-        <dependency>
-            <groupId>org.stacksaga.cassandra</groupId>
-            <artifactId>stacksaga-cassandra-reactive-support-starter</artifactId>
+         <dependency>
+            <groupId>org.stacksaga</groupId>
+            <artifactId>stacksag-async-core</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
         <!--<dependency>
             <groupId>org.stacksaga</groupId>
-            <artifactId>stacksag-async-core</artifactId>
+            <artifactId>stacksaga-cassandra-reactive-support-starter</artifactId>
             <version>1.0-SNAPSHOT</version>
+
+            <exclusions>
+&lt;!&ndash;                <exclusion>
+                    <groupId>org.stacksaga.cassandra</groupId>
+                    <artifactId>stacksaga-cassandra-api-servlet</artifactId>
+                </exclusion>&ndash;&gt;
+                <exclusion>
+                    <groupId>org.stacksaga</groupId>
+                    <artifactId>stacksaga-cassandra-api-webflux</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>-->
+
 <!--
         <dependency>
             <groupId>org.stacksaga</groupId>
@@ -75,13 +99,26 @@
             <version>1.0.0</version>
         </dependency>
 -->
-        <!--<dependency>
+        <dependency>
             <groupId>org.stacksaga</groupId>
             <artifactId>stacksaga-mysql-reactive-support</artifactId>
             <version>1.0-SNAPSHOT</version>
-        </dependency>-->
-
-       <!-- <dependency>
+            <exclusions>
+                <!--                <exclusion>
+                                    <groupId>org.stacksaga.cassandra</groupId>
+                                    <artifactId>stacksaga-cassandra-api-servlet</artifactId>
+                                </exclusion>-->
+                <exclusion>
+                    <groupId>org.stacksaga</groupId>
+                    <artifactId>stacksaga-mysql-api-webflux</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <!--<dependency>
             <groupId>org.stacksaga</groupId>
             <artifactId>stacksaga-async-client-kafka</artifactId>
             <version>1.0-SNAPSHOT</version>

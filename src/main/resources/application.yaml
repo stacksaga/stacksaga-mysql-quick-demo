@@ -4,9 +4,9 @@ spring:
   kafka:
     consumer:
       properties:
-        session.timeout.ms: 15000
-        max.poll.interval.ms: 300000
-        spring.json.trusted.packages: demo.quickdemo.aggregators
+        #        session.timeout.ms: 15000
+        #        max.poll.interval.ms: 300000
+        spring.json.trusted.packages: demo.quickdemo.aggregators,com.fasterxml.jackson.databind.node
       key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
     producer:
@@ -14,6 +14,7 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
       properties:
         spring.json.trusted.packages: "*"
+        spring:.json.add.type.headers: false
   r2dbc:
     url: r2dbc:mysql://localhost:3306/ll_stacksaga_event_store
     username: root
@@ -26,16 +27,9 @@ server:
   port: 8082
 stacksaga:
   async:
-    component-scan: demo.quickdemo.executors
-  component-scan: demo.quickdemo.aggregators
-  app-release-version: 2.0.1
+    aggregator-scan: demo.quickdemo.aggregators
+  aggregator-scan: demo.quickdemo.aggregators
   mysql:
-    datasource:
-      ddl-auto: update
-      jdbc-url: jdbc:mysql://localhost:3306/ll_stacksaga_event_store?createDatabaseIfNotExist=true
-      username: root
-      password: dilhara
-      driver-class-name: com.mysql.cj.jdbc.Driver
     use-default-r2dbc-connection: true
   cloud-window:
     access-token: 04949811-7be5-427f-8a80-57a26592493f
@@ -44,6 +38,7 @@ stacksaga:
   datasource:
     cassandra:
       use-default-session: true
+  transaction-lifetime: 3600000
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{aggregatorId:-}, %X{testn:-}, ]"
@@ -56,3 +51,13 @@ logging:
     org.stacksaga.mysql.reactive.mapper: off
     org.stacksaga.mysql.reactive.service: off
     org.stacksaga.mysql.reactive.transaction: off
+
+eureka:
+  instance:
+    metadata-map:
+      stacksagaRegion: defaultRegion
+      stacksagaZone: defaultZone
+  client:
+    service-url:
+      defaultZone: "http://localhost:8085/eureka/"
+

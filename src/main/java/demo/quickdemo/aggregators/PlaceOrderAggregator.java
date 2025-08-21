@@ -15,7 +15,9 @@ import org.stacksaga.annotation.SagaAggregatorVersion;
 public class PlaceOrderAggregator extends Aggregator {
     private String orderId;
     private double amount;
+    private double total;
     private String userId;
+    private String username;
     private boolean isPaid;
     private String preAuthRefId;
     private String paymentId;

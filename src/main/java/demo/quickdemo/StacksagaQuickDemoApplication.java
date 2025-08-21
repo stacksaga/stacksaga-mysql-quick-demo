@@ -3,15 +3,16 @@ package demo.quickdemo;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import stacksaga.async.core.SagaEventManager;
 
 @SpringBootApplication(
 //        exclude = R2dbcAutoConfiguration.class
 )
+@EnableDiscoveryClient
 public class StacksagaQuickDemoApplication implements CommandLineRunner {
     private final ApplicationContext applicationContext;
 
